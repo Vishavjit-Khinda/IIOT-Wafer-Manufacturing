@@ -1,13 +1,14 @@
 # Smart Semiconductor Manufacturing Using IIoT Architecture
 
-## 📋 Project Summary
+##  Project Summary
 
 This project implements an **Industrial IoT system** for semiconductor wafer manufacturing to detect defects in real-time before expensive downstream processing and inspection. The system uses a **5-layer IIoT architecture** with edge-based machine learning (XGBoost) to predict wafer defects with:
 
 - **79.8% Recall** - Catches 67 out of 84 defects
 - **69.8% Precision** - 70% of alarms are real defects  
 - **<50ms Latency** - Real-time edge inference
-- **$2,500/month Savings** - For 10,000 wafers/month facility (rough business estimate)
+
+By this IIOT approach, we are able to predict bad wafer much before the inspection and downstream stage, ultimately leading to savings in terms of money, resources and manual labour.
 
 The solution demonstrates end-to-end data flow from sensor simulation → MQTT messaging → edge ML inference → cloud storage (PostgreSQL) → real-time monitoring dashboard.
 
@@ -15,7 +16,7 @@ The solution demonstrates end-to-end data flow from sensor simulation → MQTT m
 
 ---
 
-## 🏗️ System Architecture
+##  System Architecture
 
 
 ![system architecture](<Screenshot 2025-12-01 000151.png>)
@@ -54,7 +55,7 @@ The solution demonstrates end-to-end data flow from sensor simulation → MQTT m
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -67,8 +68,8 @@ The solution demonstrates end-to-end data flow from sensor simulation → MQTT m
 #### 1. Clone Repository
 
 ```bash
-git clone https://github.com/Vishavjit-Khinda/IIOT Wafer Manufacturing.git
-cd IIOT Wafer Manufacturing
+git clone https://github.com/Vishavjit-Khinda/IIOT-Wafer-Manufacturing.git
+cd IIOT-Wafer-Manufacturing
 ```
 
 #### 2. Install Dependencies
@@ -82,8 +83,9 @@ pip install pandas numpy scikit-learn xgboost paho-mqtt psycopg2-binary streamli
 
 Create database:
 
-```Run Query
-copy query from database.txt
+```
+In Run Query window
+Paste query from database.txt
 ```
 
 
@@ -125,7 +127,7 @@ MQTT_PASSWORD = "your_password"
 ```
 
 
-## 🎮 How to Run
+##  How to Run
 
 Make sure database is setup and connected.
 
@@ -137,7 +139,7 @@ Make sure database is setup and connected.
 python edge_gateway.py
 ```
 
-**Expected Output:**
+**Output:**
 ```
 Connected to MQTT Broker
 Subscribed to topic: factory/line1/lithography
@@ -152,7 +154,7 @@ Waiting for sensor data...
 python device_publisher.py
 ```
 
-**Expected Output:**
+**Output:**
 ```
 Connected to MQTT Broker
 Publishing to factory/line1/lithography
@@ -167,20 +169,16 @@ Published: {"wafer_id": "WAF67890"}
 streamlit run dashboard.py
 ```
 
-**Expected Output:**
+**Output:**
 ```
 You can now view your Streamlit app in your browser.
 Local URL: http://localhost:8501
 Network URL: http://192.168.1.100:8501
 ```
 
-Open browser: **http://localhost:8501**
-
 ---
 
-## 📸 Expected Output
-
-### Dashboard Features
+## Dashboard Features
 
 1. **Production Line Status**
    - Real-time Idle/Running state
@@ -246,15 +244,16 @@ iiot-wafer-manufacturing/
 
 ---
 
-## 💰 Business Value
+## 💰 Business Value (Rough Estimate)
 
 ### Cost Savings Analysis
+  With the help of IIOT architecture and edge ML prediction, bad wafer is predicted through process parameters before the inspection takes place, ultimately resulting savings in terms of inspection cost.
 
 **Assumptions:**
 - Factory processes 10,000 wafers/month
 - Defect rate: 10% (1,000 defects/month)
 - Optical inspection cost: $5 per wafer
-- Model recall: 79.8%
+- Our ML Model recall: 79.8%
 
 | Scenario | Calculation | Cost |
 |:---------|:------------|:-----|
@@ -267,7 +266,7 @@ iiot-wafer-manufacturing/
 
 ---
 
-## 🔧 Configuration
+##  Configuration changes
 
 ### Adjust Simulation Speed
 
