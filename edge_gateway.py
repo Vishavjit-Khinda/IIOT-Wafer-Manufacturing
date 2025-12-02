@@ -24,9 +24,9 @@ MQTT_TOPICS = [
 DB_CONFIG = {
     'host': 'localhost',
     'port': 5432,
-    'database': 'final_project1',
+    'database': 'Your database name',
     'user': 'postgres',
-    'password': 'Vishavjitrose11@'  
+    'password': 'Your database password'  
 }
 
 class EdgeGateway:
