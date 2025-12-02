@@ -28,7 +28,7 @@ The solution demonstrates end-to-end data flow from sensor simulation → MQTT m
 ## 🏗️ System Architecture
 
 ```
-![alt text](image.png)
+c:\Users\visha\OneDrive\Pictures\Screenshots\Screenshot 2025-12-01 000151.png
 ```
 
 **Data Flow:**  
