@@ -12,12 +12,12 @@
 
 ## 📋 Project Summary
 
-This project implements an **Industrial IoT system** for semiconductor wafer manufacturing to detect defects in real-time before expensive downstream processing. The system uses a **5-layer IIoT architecture** with edge-based machine learning (XGBoost) to predict wafer defects with:
+This project implements an **Industrial IoT system** for semiconductor wafer manufacturing to detect defects in real-time before expensive downstream processing and inspection. The system uses a **5-layer IIoT architecture** with edge-based machine learning (XGBoost) to predict wafer defects with:
 
 - **79.8% Recall** - Catches 67 out of 84 defects
 - **69.8% Precision** - 70% of alarms are real defects  
 - **<50ms Latency** - Real-time edge inference
-- **$2,500/month Savings** - For 10,000 wafers/month facility
+- **$2,500/month Savings** - For 10,000 wafers/month facility (rough business estimate)
 
 The solution demonstrates end-to-end data flow from sensor simulation → MQTT messaging → edge ML inference → cloud storage (PostgreSQL) → real-time monitoring dashboard.
 
@@ -28,34 +28,7 @@ The solution demonstrates end-to-end data flow from sensor simulation → MQTT m
 ## 🏗️ System Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│         APPLICATION LAYER - Streamlit Dashboard         │
-│    Real-time Monitoring | Alerts | Analytics | Trends  │
-└───────────────────────┬─────────────────────────────────┘
-                        │ SQL Queries (TCP/IP)
-                        ↓
-┌─────────────────────────────────────────────────────────┐
-│             CLOUD LAYER - PostgreSQL                    │
-│   Tables: sensor_data | alerts | production_lines      │
-└───────────────────────┬─────────────────────────────────┘
-                        │ Data Storage (TCP/IP)
-                        ↑
-┌─────────────────────────────────────────────────────────┐
-│        EDGE LAYER - Python MQTT Gateway                 │
-│   XGBoost ML Model | Inference (<50ms) | Alerts        │
-└───────────────────────┬─────────────────────────────────┘
-                        │ MQTT Subscribe
-                        ↑
-┌─────────────────────────────────────────────────────────┐
-│       NETWORK LAYER - MQTT Broker (HiveMQ)              │
-│ Topics: factory/line1/lithography | line2/etching ...  │
-└───────────────────────┬─────────────────────────────────┘
-                        │ MQTT Publish (JSON)
-                        ↑
-┌─────────────────────────────────────────────────────────┐
-│      DEVICE LAYER - Sensor Simulator (Python)           │
-│ 3 Production Lines: Lithography | Etching | Deposition │
-└─────────────────────────────────────────────────────────┘
+![alt text](image.png)
 ```
 
 **Data Flow:**  
@@ -102,8 +75,8 @@ The solution demonstrates end-to-end data flow from sensor simulation → MQTT m
 #### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/iiot-wafer-manufacturing.git
-cd iiot-wafer-manufacturing
+git clone https://github.com/Vishavjit-Khinda/IIOT Wafer Manufacturing.git
+cd IIOT Wafer Manufacturing
 ```
 
 #### 2. Install Dependencies
