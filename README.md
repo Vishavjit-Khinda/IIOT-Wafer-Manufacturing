@@ -1,15 +1,5 @@
 # Smart Semiconductor Manufacturing Using IIoT Architecture
 
-> Real-time Defect Detection with Edge Machine Learning
-
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
-[![MQTT](https://img.shields.io/badge/MQTT-Protocol-orange.svg)](https://mqtt.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-336791.svg)](https://www.postgresql.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B.svg)](https://streamlit.io/)
-[![License](https://img.shields.io/badge/License-Educational-green.svg)](LICENSE)
-
----
-
 ## 📋 Project Summary
 
 This project implements an **Industrial IoT system** for semiconductor wafer manufacturing to detect defects in real-time before expensive downstream processing and inspection. The system uses a **5-layer IIoT architecture** with edge-based machine learning (XGBoost) to predict wafer defects with:
@@ -60,6 +50,8 @@ The solution demonstrates end-to-end data flow from sensor simulation → MQTT m
 - ⚠️ **False Positives (FP):** 29 - False Alarms
 - ✅ **True Negatives (TN):** 731 - Good Wafers Identified
 
+![Model Metrics](<Screenshot 2025-12-01 150039.png>)
+
 ---
 
 ## 🚀 Getting Started
@@ -68,7 +60,7 @@ The solution demonstrates end-to-end data flow from sensor simulation → MQTT m
 
 - Python 3.8 or higher
 - PostgreSQL 13 or higher
-- MQTT Broker (HiveMQ Cloud or local Mosquitto)
+- MQTT Broker (HiveMQ)
 
 ### Installation
 
@@ -85,30 +77,15 @@ cd IIOT Wafer Manufacturing
 pip install pandas numpy scikit-learn xgboost paho-mqtt psycopg2-binary streamlit plotly
 ```
 
-Or use requirements file:
-
-```bash
-pip install -r requirements.txt
-```
 
 #### 3. Setup PostgreSQL Database
 
 Create database:
 
-```bash
-psql -U postgres
+```Run Query
+copy query from database.txt
 ```
 
-```sql
-CREATE DATABASE final_project1;
-\q
-```
-
-Run schema:
-
-```bash
-psql -U postgres -d final_project1 -f database_setup.sql
-```
 
 #### 4. Configure Credentials
 
@@ -120,9 +97,9 @@ Update **both files** with your PostgreSQL password:
 DB_CONFIG = {
     'host': 'localhost',
     'port': 5432,
-    'database': 'final_project1',
+    'database': 'Your database name',     # ← change this
     'user': 'postgres',
-    'password': 'YOUR_PASSWORD_HERE'  # ← Change this
+    'password': 'Your database password'  # ← Change this
 }
 ```
 
@@ -132,9 +109,9 @@ DB_CONFIG = {
 DB_CONFIG = {
     'host': 'localhost',
     'port': 5432,
-    'database': 'final_project1',
+    'database': 'Your database name',     # ← Change this
     'user': 'postgres',
-    'password': 'YOUR_PASSWORD_HERE'  # ← Change this
+    'password': 'Your database password'  # ← Change this
 }
 ```
 
@@ -147,11 +124,10 @@ MQTT_USERNAME = "your_username"
 MQTT_PASSWORD = "your_password"
 ```
 
-> **Note:** Sign up for free MQTT broker at [HiveMQ Cloud](https://www.hivemq.com/mqtt-cloud-broker/)
-
----
 
 ## 🎮 How to Run
+
+Make sure database is setup and connected.
 
 ### Run the System (3 Terminals Required)
 
@@ -180,9 +156,9 @@ python device_publisher.py
 ```
 Connected to MQTT Broker
 Publishing to factory/line1/lithography
-Published: {"wafer_id": "WAF12345", ...}
+Published: {"wafer_id": "WAF12345"}
 Publishing to factory/line2/etching
-Published: {"wafer_id": "WAF67890", ...}
+Published: {"wafer_id": "WAF67890"}
 ```
 
 #### Terminal 3: Start Dashboard
@@ -228,6 +204,8 @@ Open browser: **http://localhost:8501**
    - Total alerts generated
    - Acknowledged alerts
 
+![Dashboard](<Screenshot 2025-12-01 032210.png>)
+
 ### Sample MQTT Payload
 
 ```json
@@ -244,18 +222,6 @@ Open browser: **http://localhost:8501**
   "timestamp": "2025-12-01 19:45:32"
 }
 ```
-
-### Edge Gateway Console Output
-
-```
-Received message on factory/line1/lithography
-Processing wafer: WAF12345
-ML Prediction: DEFECT (Probability: 0.87)
-Alert generated for WAF12345
-Data stored in database
-```
-
----
 
 ## 📁 Project Structure
 
@@ -308,11 +274,8 @@ iiot-wafer-manufacturing/
 **File:** `device_publisher.py` (line 85)
 
 ```python
-time.sleep(8)  # Default: 8 seconds per wafer
+time.sleep(8)  # Default: 8 seconds per wafer, can be changed as per requirement
 
-# Options:
-time.sleep(3)   # Faster: 3 seconds (realistic)
-time.sleep(15)  # Slower: 15 seconds (easier to observe)
 ```
 
 ### Change Dashboard Refresh Rate
@@ -327,91 +290,16 @@ refresh_rate = 2  # Default: 2 seconds
 
 ---
 
-## 🐛 Troubleshooting
-
-### Database Connection Error
-
-**Problem:** `psycopg2.OperationalError: could not connect to server`
-
-**Solutions:**
-1. Verify PostgreSQL is running
-2. Check credentials in `edge_gateway.py` and `dashboard.py`
-3. Test connection: `psql -U postgres -d final_project1`
-
-### MQTT Connection Failed
-
-**Problem:** `Connection refused` or `Authentication failed`
-
-**Solutions:**
-1. Verify broker URL and port
-2. Check username and password
-3. For HiveMQ Cloud: Verify cluster is active
-4. Test with: `mosquitto_sub -h broker-url -t "test" -u username -P password`
-
-### Module Not Found Error
-
-**Problem:** `ModuleNotFoundError: No module named 'paho'`
-
-**Solution:**
-```bash
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-### Dashboard Not Loading
-
-**Problem:** Streamlit shows errors
-
-**Solution:**
-```bash
-pip install --upgrade streamlit
-streamlit cache clear
-streamlit run dashboard.py
-```
-
----
-
-## 👥 Contributors
-
-**Group 3**
-
-- Sameerjeet Chhabra
-- Vishavjit Singh Khinda
-- Jose Moreno-Virgil
-
-**Course:** MFG 598 - Industrial Internet of Things  
-**Institution:** Arizona State University  
-**Date:** December 2025
-
----
-
 ## 📄 License
 
-This project is developed for educational purposes as part of the MFG 598 course at Arizona State University.
+This project is developed for educational purposes as part of the MFG 598 (Industrial Internet of Things) course at Arizona State University.
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **Dataset:** [Kaggle - Semiconductor Wafer Fault Detection](https://www.kaggle.com/datasets/arbazkhan971/semiconductor-wafer-fault-detection)
-- **MQTT Broker:** [HiveMQ Cloud](https://www.hivemq.com/)
-- **Dashboard Framework:** [Streamlit](https://streamlit.io/)
-- **ML Framework:** [XGBoost](https://xgboost.ai/)
 
 ---
 
-## 📞 Contact
 
-For questions or collaboration:
-- Open an issue on GitHub
-- Email: [your-email@asu.edu]
-
----
-
-<div align="center">
-
-**⭐ If you found this project helpful, please star this repository! ⭐**
-
-Made with ❤️ by Group 3
-
-</div>
