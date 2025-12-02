@@ -132,8 +132,8 @@ MQTT_PASSWORD = "your_password"
 Make sure Postgresql database is setup and connected.\
 Pretrained ML model (edge_model.pkl) is already saved, edge_gateway.py will automatically load this ML model.\
 device_publisher.py will automatically load the data_simulation.csv for streaming.\
-**NOTE:** data_train.csv was used to train the ML model.\
-         -data_validation was used for validation/testing purpose of ML model.
+**NOTE:** -data_train.csv was used to train the ML model.\
+          -data_validation was used for validation/testing purpose of ML model.
 
 #### Run the System (3 Terminals Required)
 
