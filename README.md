@@ -84,8 +84,8 @@ pip install pandas numpy scikit-learn xgboost paho-mqtt psycopg2-binary streamli
 Create database:
 
 ```
-In Run Query window
-Paste query from database.txt
+In Run Query window (on Postgresql database)
+Paste entire query in database.txt
 ```
 
 
@@ -129,7 +129,11 @@ MQTT_PASSWORD = "your_password"
 
 ###  How to Run
 
-Make sure database is setup and connected.
+Make sure Postgresql database is setup and connected.
+Pretrained ML model (edge_model.pkl) is already saved, edge_gateway.py will automatically load this ML model.
+device_publisher.py will automatically load the data_simulation.csv for streaming.
+NOTE: data_train.csv was used to train the ML model.
+      data_validation was used for validation/testing purpose of ML model.
 
 #### Run the System (3 Terminals Required)
 
