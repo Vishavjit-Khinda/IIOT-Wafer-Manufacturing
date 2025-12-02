@@ -19,7 +19,7 @@ The solution demonstrates end-to-end data flow from sensor simulation → MQTT m
 ##  System Architecture
 
 
-![system architecture](<Screenshot 2025-12-01 000151.png>)
+![system architecture](<IIOT Architecture.png>)
 
 
 **Data Flow:**  
@@ -51,7 +51,7 @@ The solution demonstrates end-to-end data flow from sensor simulation → MQTT m
 - ⚠️ **False Positives (FP):** 29 - False Alarms
 - ✅ **True Negatives (TN):** 731 - Good Wafers Identified
 
-![Model Metrics](<Screenshot 2025-12-01 150039.png>)
+![Model Metrics](<Model metrics.png>)
 
 ---
 
@@ -131,7 +131,7 @@ MQTT_PASSWORD = "your_password"
 
 Make sure database is setup and connected.
 
-### Run the System (3 Terminals Required)
+#### Run the System (3 Terminals Required)
 
 #### Terminal 1: Start Edge Gateway
 
@@ -202,7 +202,7 @@ Network URL: http://192.168.1.100:8501
    - Total alerts generated
    - Acknowledged alerts
 
-![Dashboard](<Screenshot 2025-12-01 032210.png>)
+![Dashboard](<Dashboard.png>)
 
 ### Sample MQTT Payload
 
