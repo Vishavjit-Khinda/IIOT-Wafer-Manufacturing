@@ -127,7 +127,7 @@ MQTT_PASSWORD = "your_password"
 ```
 
 
-##  How to Run
+###  How to Run
 
 Make sure database is setup and connected.
 
@@ -221,7 +221,7 @@ Network URL: http://192.168.1.100:8501
 }
 ```
 
-## 📁 Project Structure
+### 📁 Project Structure
 
 ```
 iiot-wafer-manufacturing/
@@ -247,7 +247,7 @@ iiot-wafer-manufacturing/
 ## 💰 Business Value (Rough Estimate)
 
 ### Cost Savings Analysis
-  With the help of IIOT architecture and edge ML prediction, bad wafer is predicted through process parameters before the inspection takes place, ultimately resulting savings in terms of inspection cost.
+  With the help of IIOT architecture and edge ML prediction, bad wafer is predicted through process parameters, before the inspection takes place, ultimately resulting into savings in terms of inspection cost.
 
 **Assumptions:**
 - Factory processes 10,000 wafers/month
