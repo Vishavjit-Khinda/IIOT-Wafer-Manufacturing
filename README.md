@@ -27,9 +27,9 @@ The solution demonstrates end-to-end data flow from sensor simulation → MQTT m
 
 ## 🏗️ System Architecture
 
-```
-![alt text](<Screenshot 2025-12-01 000151.png>)
-```
+
+![system architecture](<Screenshot 2025-12-01 000151.png>)
+
 
 **Data Flow:**  
 `Sensor Data → MQTT (JSON) → Edge ML Processing → PostgreSQL → Real-time Dashboard`
