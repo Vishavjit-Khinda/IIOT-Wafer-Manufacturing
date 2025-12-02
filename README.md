@@ -297,7 +297,7 @@ This project is developed for educational purposes as part of the MFG 598 (Indus
 
 ##  Acknowledgments
 
-- **Dataset:** [Kaggle - Semiconductor Wafer Fault Detection](https://www.kaggle.com/datasets/arbazkhan971/semiconductor-wafer-fault-detection)
+- **Dataset:** [Kaggle - Semiconductor Wafer Fault Detection](https://www.kaggle.com/datasets/programmer3/semiconductor-sensor-data-for-predictive-quality)
 
 ---
 
