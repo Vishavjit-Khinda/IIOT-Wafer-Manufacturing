@@ -1,0 +1,164 @@
+-- ============================================================================
+-- POSTGRESQL DATABASE SETUP FOR IIOT WAFER MANUFACTURING SYSTEM
+-- Smart Semiconductor Manufacturing Using IIoT Architecture
+-- ============================================================================
+-- Run this script directly in PostgreSQL using psql or pgAdmin
+-- ============================================================================
+
+-- STEP 1: Create Database (run this as postgres superuser)
+-- ============================================================================
+-- If you're in psql, first connect to postgres database:
+-- \c postgres
+
+-- Drop database if exists (CAUTION: This deletes all data!)
+DROP DATABASE IF EXISTS iiot_wafer;
+
+-- Create new database
+CREATE DATABASE iiot_wafer
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'en_US.utf8'
+    LC_CTYPE = 'en_US.utf8'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+COMMENT ON DATABASE iiot_wafer IS 'IIoT Wafer Manufacturing Quality Control System';
+
+-- ============================================================================
+-- STEP 2: Connect to the new database
+-- ============================================================================
+-- In psql, run: \c iiot_wafer
+-- In pgAdmin, refresh and open the iiot_wafer database, then run the rest
+
+-- ============================================================================
+-- STEP 3: Create Tables
+-- ============================================================================
+
+-- Table 1: Production Lines
+-- Stores current status of each production line
+-- ============================================================================
+DROP TABLE IF EXISTS production_lines CASCADE;
+
+CREATE TABLE production_lines (
+    id SERIAL PRIMARY KEY,
+    line_name VARCHAR(50) UNIQUE NOT NULL,
+    status VARCHAR(20) DEFAULT 'Idle',
+    current_wafer_id VARCHAR(50),
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    CONSTRAINT chk_status CHECK (status IN ('Idle', 'Running', 'Stopped'))
+);
+
+COMMENT ON TABLE production_lines IS 'Tracks real-time status of production lines';
+COMMENT ON COLUMN production_lines.line_name IS 'Name of production line (Lithography, Etching, Deposition)';
+COMMENT ON COLUMN production_lines.status IS 'Current status: Idle, Running, or Stopped';
+COMMENT ON COLUMN production_lines.current_wafer_id IS 'ID of wafer currently being processed';
+COMMENT ON COLUMN production_lines.last_updated IS 'Timestamp of last status update';
+
+-- Create index for faster queries
+CREATE INDEX idx_production_lines_status ON production_lines(status);
+CREATE INDEX idx_production_lines_updated ON production_lines(last_updated);
+
+-- ============================================================================
+-- Table 2: Sensor Data
+-- Stores all sensor readings with ML predictions
+-- ============================================================================
+DROP TABLE IF EXISTS sensor_data CASCADE;
+
+CREATE TABLE sensor_data (
+    id SERIAL PRIMARY KEY,
+    process_id VARCHAR(50),
+    timestamp TIMESTAMP NOT NULL,
+    production_line VARCHAR(50) NOT NULL,
+    wafer_id VARCHAR(50) NOT NULL,
+    
+    -- Sensor readings (10 numerical features)
+    chamber_temperature FLOAT,
+    gas_flow_rate FLOAT,
+    rf_power FLOAT,
+    etch_depth FLOAT,
+    rotation_speed FLOAT,
+    vacuum_pressure FLOAT,
+    stage_alignment_error FLOAT,
+    vibration_level FLOAT,
+    uv_exposure_intensity FLOAT,
+    particle_count INTEGER,
+    
+    -- Categorical features
+    join_status VARCHAR(20),
+    
+    -- ML prediction results
+    predicted_defect INTEGER CHECK (predicted_defect IN (0, 1)),
+    defect_probability FLOAT CHECK (defect_probability >= 0 AND defect_probability <= 1),
+    
+    -- Ground truth (for validation)
+    actual_defect INTEGER CHECK (actual_defect IN (0, 1)),
+    
+    -- Metadata
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    CONSTRAINT fk_production_line FOREIGN KEY (production_line) 
+        REFERENCES production_lines(line_name) ON UPDATE CASCADE
+);
+
+COMMENT ON TABLE sensor_data IS 'Stores all sensor readings with ML predictions';
+COMMENT ON COLUMN sensor_data.predicted_defect IS '0 = No defect predicted, 1 = Defect predicted';
+COMMENT ON COLUMN sensor_data.defect_probability IS 'ML model probability of defect (0.0 to 1.0)';
+COMMENT ON COLUMN sensor_data.actual_defect IS 'Ground truth defect label (0 or 1)';
+
+-- Create indexes for faster queries
+CREATE INDEX idx_sensor_data_line ON sensor_data(production_line);
+CREATE INDEX idx_sensor_data_wafer ON sensor_data(wafer_id);
+CREATE INDEX idx_sensor_data_timestamp ON sensor_data(timestamp);
+CREATE INDEX idx_sensor_data_created ON sensor_data(created_at DESC);
+CREATE INDEX idx_sensor_data_defect ON sensor_data(predicted_defect);
+
+-- ============================================================================
+-- Table 3: Alerts
+-- Stores defect alerts and acknowledgment status
+-- ============================================================================
+DROP TABLE IF EXISTS alerts CASCADE;
+
+CREATE TABLE alerts (
+    id SERIAL PRIMARY KEY,
+    production_line VARCHAR(50) NOT NULL,
+    wafer_id VARCHAR(50) NOT NULL,
+    alert_type VARCHAR(50) DEFAULT 'Defect Detected',
+    alert_message TEXT,
+    defect_probability FLOAT CHECK (defect_probability >= 0 AND defect_probability <= 1),
+    
+    -- Acknowledgment tracking
+    acknowledged BOOLEAN DEFAULT FALSE,
+    acknowledged_at TIMESTAMP,
+    acknowledged_by VARCHAR(100),
+    
+    -- Metadata
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    CONSTRAINT fk_alert_production_line FOREIGN KEY (production_line) 
+        REFERENCES production_lines(line_name) ON UPDATE CASCADE
+);
+
+COMMENT ON TABLE alerts IS 'Stores defect alerts and acknowledgment status';
+COMMENT ON COLUMN alerts.acknowledged IS 'False = Active alert, True = Acknowledged';
+COMMENT ON COLUMN alerts.acknowledged_at IS 'Timestamp when alert was acknowledged';
+
+-- Create indexes for faster queries
+CREATE INDEX idx_alerts_line ON alerts(production_line);
+CREATE INDEX idx_alerts_acknowledged ON alerts(acknowledged);
+CREATE INDEX idx_alerts_created ON alerts(created_at DESC);
+CREATE INDEX idx_alerts_wafer ON alerts(wafer_id);
+
+-- ============================================================================
+-- STEP 4: Initialize Production Lines
+-- ============================================================================
+-- Insert the three production lines with initial 'Idle' status
+
+INSERT INTO production_lines (line_name, status, current_wafer_id, last_updated) 
+VALUES 
+    ('Lithography', 'Idle', NULL, CURRENT_TIMESTAMP),
+    ('Etching', 'Idle', NULL, CURRENT_TIMESTAMP),
+    ('Deposition', 'Idle', NULL, CURRENT_TIMESTAMP)
+ON CONFLICT (line_name) DO NOTHING;
+
